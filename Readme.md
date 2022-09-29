@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Георгий Гальчун](https://up.htmlacademy.ru/javascript/27/user/1045709).
-* Наставник: `Неизвестно`.
+* Наставник: [Павел Нюкало](https://htmlacademy.ru/profile/nyukalopavel).
 
 ---
 
