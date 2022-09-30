@@ -8,3 +8,7 @@ const getRandomInRange = (min, max) => {
 };
 
 getRandomInRange(13, 10);
+
+const checkMaxStringLength = (string, maxStringLength) => string.length <= maxStringLength;
+
+checkMaxStringLength('строка', 5);
