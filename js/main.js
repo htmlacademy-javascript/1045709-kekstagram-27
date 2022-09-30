@@ -4,7 +4,7 @@ const getRandomInRange = (min, max) => {
   if (min <= 0 || max <= 0) {
     return NaN;
   }
-  return max < min ? getRandomInRange(max, min) : Math.random() * (max - min) + min;
+  return max < min ? getRandomInRange(max, min) : Math.round(Math.random() * (max - min) + min);
 };
 
 getRandomInRange(13, 10);
