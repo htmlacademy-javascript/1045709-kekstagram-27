@@ -10,16 +10,19 @@ const popupCommentsLoader = popup.querySelector('.comments-loader');
 const popupCommentsLoaderCount = popup.querySelector('.social__comment-count');
 const popupCloseButton = popup.querySelector('.big-picture__cancel');
 
-const popupCloseClickHandler = () => {
+const closePopup = () => {
   popup.classList.add('hidden');
   document.body.classList.remove('modal-open');
+};
+
+const popupCloseClickHandler = () => {
+  closePopup();
   popupCloseButton.removeEventListener('click', popupCloseClickHandler);
 };
 
 const popupCloseKeydownHandler = (evt) => {
   if (evt.code === 'Escape') {
-    popup.classList.add('hidden');
-    document.body.classList.remove('modal-open');
+    closePopup();
     document.removeEventListener('keydown', popupCloseKeydownHandler);
   }
 };
@@ -36,27 +39,24 @@ const generatePopupContent = (dataObj) => {
   popupLikesCount.textContent = dataObj.likes;
   popupCommentsCount.textContent = dataObj.comments.length;
   popupDescription.textContent = dataObj.description;
-  popupCommentsList.innerHTML = '';
   popupCommentsLoader.classList.add('hidden');
   popupCommentsLoaderCount.classList.add('hidden');
 
+  const commentElement = popupCommentsList.querySelector('.social__comment');
+  popupCommentsList.innerHTML = '';
   dataObj.comments.forEach(({avatar, name, message}) => {
-    popupCommentsList.innerHTML += `
-    <li class="social__comment">
-        <img
-            class="social__picture"
-            src="${avatar}"
-            alt="${name}"
-            width="35" height="35">
-        <p class="social__text">${message}</p>
-    </li>`;
+    const comment = commentElement.cloneNode(true);
+    comment.querySelector('.social__picture').src = avatar;
+    comment.querySelector('.social__picture').alt = name;
+    comment.querySelector('.social__text').textContent = message;
+    popupCommentsList.appendChild(comment);
   });
 };
 
 const photoClickHandler = (evt) => {
   const picture = evt.target.closest('.picture');
   if (picture) {
-    const pictureObj = pictures.find((elem) => elem.id === +picture.dataset.id);
+    const pictureObj = pictures.find((elem) => elem.id === Number(picture.dataset.id));
     generatePopupContent(pictureObj);
     showPopup();
   }
