@@ -15,17 +15,19 @@ const closePopup = () => {
   document.body.classList.remove('modal-open');
 };
 
-const popupCloseClickHandler = () => {
+function popupCloseClickHandler() {
   closePopup();
   popupCloseButton.removeEventListener('click', popupCloseClickHandler);
-};
+  document.removeEventListener('keydown', popupCloseKeydownHandler);
+}
 
-const popupCloseKeydownHandler = (evt) => {
+function popupCloseKeydownHandler(evt) {
   if (evt.code === 'Escape') {
     closePopup();
     document.removeEventListener('keydown', popupCloseKeydownHandler);
+    popupCloseButton.removeEventListener('click', popupCloseClickHandler);
   }
-};
+}
 
 const showPopup = () => {
   popupCloseButton.addEventListener('click', popupCloseClickHandler);
