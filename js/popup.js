@@ -13,19 +13,17 @@ const popupCloseButton = popup.querySelector('.big-picture__cancel');
 const closePopup = () => {
   popup.classList.add('hidden');
   document.body.classList.remove('modal-open');
+  popupCloseButton.removeEventListener('click', popupCloseClickHandler);
+  document.removeEventListener('keydown', popupCloseKeydownHandler);
 };
 
 function popupCloseClickHandler() {
   closePopup();
-  popupCloseButton.removeEventListener('click', popupCloseClickHandler);
-  document.removeEventListener('keydown', popupCloseKeydownHandler);
 }
 
 function popupCloseKeydownHandler(evt) {
   if (evt.code === 'Escape') {
     closePopup();
-    document.removeEventListener('keydown', popupCloseKeydownHandler);
-    popupCloseButton.removeEventListener('click', popupCloseClickHandler);
   }
 }
 
