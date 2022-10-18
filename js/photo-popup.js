@@ -1,5 +1,5 @@
 import { showPopup } from './popup.js';
-import { pictures } from './render.js';
+import { pictures } from './photo-render.js';
 
 const popup = document.querySelector('.big-picture');
 const popupImg = popup.querySelector('.big-picture__img').querySelector('img');

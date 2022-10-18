@@ -1,11 +1,10 @@
+import { checkMaxLength, checkArrValuesNotRepeat } from './util.js';
 import { showPopup } from './popup.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadPopup = uploadForm.querySelector('.img-upload__overlay');
 const uploadFileInput = uploadForm.querySelector('#upload-file');
 const uploadResetBtn = uploadForm.querySelector('#upload-cancel');
-const uploadHashtag = uploadForm.querySelector('.text__hashtags');
-const uploadDescription = uploadForm.querySelector('.text__description');
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -13,32 +12,33 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'error-text',
 });
 
-const validateHashtagRepeatValues = (arr) => {
-  const objOfValueQuantity = arr.reduce((acc, elem) => {
-    acc[elem] = acc[elem] ? acc[elem] + 1 : 1;
-    return acc;
-  }, {});
-  if (Object.values(objOfValueQuantity).some((value) => value > 1)) {
-    return false;
+const uploadHashtag = uploadForm.querySelector('.text__hashtags');
+const hastagRegex = /^#[a-zа-яё0-9]/i;
+const maxHastagLength = 20;
+const maxHastagsQuantity = 5;
+
+const validateHashtagSymbols = () => {
+  if (uploadHashtag.value !== '') {
+    return uploadHashtag.value.split(' ').every((hastag) => hastagRegex.test(hastag));
   }
   return true;
 };
+const validateHastagLength = () => uploadHashtag.value.split(' ').every((hastag) => checkMaxLength(hastag, maxHastagLength));
+const validateHashtagsQuantity = () => checkMaxLength(uploadHashtag.value.split(' '), maxHastagsQuantity);
+const validateHashtagValuesRepeat = () => checkArrValuesNotRepeat(uploadHashtag.value.split(' '), true);
 
-const validateHashtag = () => {
-  const regex = /^#[a-zа-яё0-9]{1,19}$/i;
-  const hastagsArr = uploadHashtag.value.split(' ');
-  if (hastagsArr.length > 5 || !validateHashtagRepeatValues(hastagsArr)) {
-    return false;
-  }
-  if (hastagsArr.every((hastag) => regex.test(hastag)) || uploadHashtag.value === '') {
-    return true;
-  }
-};
+pristine.addValidator(uploadHashtag, validateHashtagSymbols, 'Хэштег должен начинаться с # и состоять из букв и чисел');
+pristine.addValidator(uploadHashtag, validateHastagLength, `Длина хэштега меньше ${maxHastagLength} символов`);
+pristine.addValidator(uploadHashtag, validateHashtagsQuantity, `Максимум ${maxHastagsQuantity} хэштегов`);
+pristine.addValidator(uploadHashtag, validateHashtagValuesRepeat, 'Хэштеги не могут повторяться');
 
-const validateDescription = (value) => value.length <= 140;
 
-pristine.addValidator(uploadHashtag, validateHashtag, 'Введите корректное значение');
-pristine.addValidator(uploadDescription, validateDescription, 'Максимальное длина 140 символов');
+const uploadDescription = uploadForm.querySelector('.text__description');
+const maxDescriptionLength = 140;
+
+const validateDescriptionMaxLength = () => checkMaxLength(uploadDescription.value, maxDescriptionLength);
+
+pristine.addValidator(uploadDescription, validateDescriptionMaxLength, `Максимальное длина ${maxDescriptionLength} символов`);
 
 uploadForm.addEventListener('submit', (evt) => {
   if (!pristine.validate()) {

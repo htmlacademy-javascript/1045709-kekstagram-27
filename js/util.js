@@ -9,12 +9,19 @@ const getRandomPositiveInteger = (min, max) => {
 
 const checkMaxLength = (value, maxLength) => value.length <= maxLength;
 
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+const checkArrValuesNotRepeat = (arr, isStringsArr = false) => {
+  if (isStringsArr) {
+    arr = arr.map((string) => string.toLowerCase());
+  }
+  const arrWithoutRepeats = new Set(arr);
+  return arrWithoutRepeats.size === arr.length;
+};
+
+const getRandomArrayElement = (arr) => arr[getRandomPositiveInteger(0, arr.length - 1)];
 
 const createRandomUniqueId = (arr, range) => {
   const randomId = getRandomPositiveInteger(1, range);
   return arr.some((elem) => elem.id === randomId) ? createRandomUniqueId(arr, range) : randomId;
 };
 
-
-export {getRandomPositiveInteger, checkMaxLength, createRandomUniqueId, getRandomArrayElement};
+export {getRandomPositiveInteger, checkMaxLength, checkArrValuesNotRepeat, createRandomUniqueId, getRandomArrayElement};
