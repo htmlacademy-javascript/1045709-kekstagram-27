@@ -1,2 +1,3 @@
-import './render.js';
-import './popup.js';
+import './photo-render.js';
+import './photo-popup.js';
+import './upload-form.js';
