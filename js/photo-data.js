@@ -11,7 +11,7 @@ const createPhotoComment = () => ({
 });
 
 const createPhotoComments = () => {
-  const comments = Array.from({length: getRandomPositiveInteger(1, 20)}, createPhotoComment);
+  const comments = Array.from({length: getRandomPositiveInteger(5, 20)}, createPhotoComment);
   comments.forEach((elem) => (elem.id = createRandomUniqueId(comments, 20)));
   return comments;
 };
