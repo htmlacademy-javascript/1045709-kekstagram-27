@@ -3,6 +3,7 @@ import { pictures } from './photo-render.js';
 
 const COMMENTS_TO_UPLOAD_QUANTITY = 5;
 const IS_CLEAR_INPUTS_ON_CLOSE_POPUP = true;
+const IS_PRISTINE_IN_POPUP = false;
 
 const gallery = document.querySelector('.pictures');
 const popup = document.querySelector('.big-picture');
@@ -58,13 +59,12 @@ const photoClickHandler = (evt) => {
   if (picture) {
     const pictureObj = pictures.find((elem) => elem.id === Number(picture.dataset.id));
     generatePopupContent(pictureObj);
-    showPopup(popup, popupCloseButton, IS_CLEAR_INPUTS_ON_CLOSE_POPUP);
-
-    popupCommentsLoaderBtn.onclick = () => {
-      uploadComments(pictureObj.comments);
-    };
-
+    const commentsLoaderClickHandler = () => uploadComments(pictureObj.comments);
+    popupCommentsLoaderBtn.addEventListener('click', commentsLoaderClickHandler);
+    showPopup(popup, popupCloseButton, IS_CLEAR_INPUTS_ON_CLOSE_POPUP, IS_PRISTINE_IN_POPUP, commentsLoaderClickHandler);
   }
 };
 
 gallery.addEventListener('click', photoClickHandler);
+
+export { popupCommentsLoaderBtn };

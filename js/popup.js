@@ -1,3 +1,5 @@
+import { popupCommentsLoaderBtn } from './photo-popup.js';
+
 const clearInputs = (popupContainer, pristine) => {
   const inputsWithoutDefaultVal = popupContainer.querySelectorAll('input:not([value])');
   const allTextAreas = popupContainer.querySelectorAll('textarea');
@@ -20,7 +22,7 @@ const clearInputs = (popupContainer, pristine) => {
 
 };
 
-const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pristine) => {
+const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pristine, commentsLoaderClickHandler) => {
 
   const closePopup = () => {
     popupContainer.classList.add('hidden');
@@ -29,6 +31,9 @@ const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pri
     document.removeEventListener('keydown', popupCloseKeydownHandler);
     if (clearInputsOnClose) {
       clearInputs(popupContainer, pristine);
+    }
+    if (commentsLoaderClickHandler) {
+      popupCommentsLoaderBtn.removeEventListener('click', commentsLoaderClickHandler);
     }
   };
 
@@ -46,9 +51,13 @@ const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pri
   document.addEventListener('keydown', popupCloseKeydownHandler);
 };
 
-const showPopup = (popupContainer, closeBtn, clearInputsOnClose = false, pristine = false) => {
+const showPopup = (popupContainer, closeBtn, clearInputsOnClose = false, pristine = false, commentsLoaderClickHandler = false) => {
   document.body.classList.add('modal-open');
   popupContainer.classList.remove('hidden');
+  if (commentsLoaderClickHandler) {
+    addPopupCloseHandlers(popupContainer, closeBtn, clearInputsOnClose, pristine, commentsLoaderClickHandler);
+    return;
+  }
   addPopupCloseHandlers(popupContainer, closeBtn, clearInputsOnClose, pristine);
 };
 
