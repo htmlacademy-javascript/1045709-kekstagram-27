@@ -7,25 +7,26 @@ const smallerScaleBtn = document.querySelector('.scale__control--smaller');
 const biigerScaleBtn = document.querySelector('.scale__control--bigger');
 const scaleInput = document.querySelector('.scale__control--value');
 
-let photoScaleValue = 100;
 
-const setPhotoScale = () => {
-  uploadImg.style.transform = `scale(${photoScaleValue / 100})`;
-  scaleInput.value = `${photoScaleValue}%`;
+const getPhotoScale = () => parseInt(scaleInput.value, 10);
+
+const setPhotoScale = (scale) => {
+  uploadImg.style.transform = `scale(${scale / 100})`;
+  scaleInput.value = `${scale}%`;
 };
 
 const smallerScaleBtnClickHandler = () => {
-  if (photoScaleValue > MIN_SCALE_VALUE) {
-    photoScaleValue -= SCALE_STEP;
-    setPhotoScale();
+  if (getPhotoScale() > MIN_SCALE_VALUE) {
+    const newScale = getPhotoScale() - SCALE_STEP;
+    setPhotoScale(newScale);
   }
 };
 
 const biggerScaleBtnClickHandler = () => {
-  if (photoScaleValue < MAX_SCALE_VALUE) {
-    photoScaleValue += SCALE_STEP;
-    setPhotoScale();
+  if (getPhotoScale() < MAX_SCALE_VALUE) {
+    const newScale = getPhotoScale() + SCALE_STEP;
+    setPhotoScale(newScale);
   }
 };
 
-export { smallerScaleBtn, biigerScaleBtn, smallerScaleBtnClickHandler, biggerScaleBtnClickHandler };
+export { scaleInput, smallerScaleBtn, biigerScaleBtn, smallerScaleBtnClickHandler, biggerScaleBtnClickHandler, uploadImg };

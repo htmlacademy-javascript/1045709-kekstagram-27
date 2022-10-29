@@ -1,23 +1,8 @@
-const clearInputs = (popupContainer, pristine) => {
+const clearInputsInPopup = (popupContainer) => {
   const inputsWithoutDefaultVal = popupContainer.querySelectorAll('input:not([value])');
   const allTextAreas = popupContainer.querySelectorAll('textarea');
-
   inputsWithoutDefaultVal.forEach((input) => (input.value = ''));
   allTextAreas.forEach((textArea) => (textArea.value = ''));
-
-  const popupForm = popupContainer.closest('form');
-  if (popupForm) {
-    const uploadInput = popupForm.querySelector('input[type="file"]');
-    if (uploadInput) {
-      uploadInput.value = '';
-    }
-  }
-
-  if (pristine) {
-    const pristineErrorsTexts = popupContainer.querySelectorAll('.error-text');
-    pristineErrorsTexts.forEach((errorText) => (errorText.style.display = 'none'));
-  }
-
 };
 
 const addPopupHandlers = (popupHandlers) => {
@@ -28,39 +13,41 @@ const removePopupHandlers = (popupHandlers) => {
   popupHandlers.forEach((handlerObj) => handlerObj.target.removeEventListener(handlerObj.type, handlerObj.func));
 };
 
-const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pristine, popupHandlers) => {
+const closePopup = (popupContainer, popupHandlers, onClosePopupFunc) => {
+  popupContainer.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  removePopupHandlers(popupHandlers);
+  if (onClosePopupFunc) {
+    onClosePopupFunc();
+  }
+};
 
-  const closePopup = () => {
-    popupContainer.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-    closeBtn.removeEventListener('click', popupCloseClickHandler);
-    document.removeEventListener('keydown', popupCloseKeydownHandler);
-    if (clearInputsOnClose) {
-      clearInputs(popupContainer, pristine);
-    }
-    if (popupHandlers) {
-      removePopupHandlers(popupHandlers);
+const createPopupCloseHandlers = (popupContainer, closeBtn, popupHandlers, onClosePopupFunc) => {
+
+  const popupCloseClickHandler = () => {
+    closePopup(popupContainer, popupHandlers, onClosePopupFunc);
+  };
+
+  const popupCloseKeydownHandler = (evt) => {
+    if (evt.code === 'Escape' && document.activeElement.getAttribute('type') !== 'text' && document.activeElement.tagName !== 'TEXTAREA') {
+      closePopup(popupContainer, popupHandlers, onClosePopupFunc);
     }
   };
 
-  function popupCloseClickHandler() {
-    closePopup();
-  }
+  const popupCloseHandlers = [
+    {'target': closeBtn, 'type': 'click', 'func': popupCloseClickHandler},
+    {'target': document, 'type': 'keydown', 'func': popupCloseKeydownHandler}
+  ];
 
-  function popupCloseKeydownHandler(evt) {
-    if (evt.code === 'Escape' && document.activeElement.getAttribute('type') !== 'text' && document.activeElement.tagName !== 'TEXTAREA') {
-      closePopup();
-    }
-  }
-
-  closeBtn.addEventListener('click', popupCloseClickHandler);
-  document.addEventListener('keydown', popupCloseKeydownHandler);
+  popupHandlers.push(...popupCloseHandlers);
 };
 
-const showPopup = (popupContainer, closeBtn, clearInputsOnClose = false, pristine = false, popupHandlers = false) => {
+const showPopup = (popupContainer, closeBtn, popupHandlers = [], onClosePopupFunc = false) => {
   document.body.classList.add('modal-open');
   popupContainer.classList.remove('hidden');
-  addPopupCloseHandlers(popupContainer, closeBtn, clearInputsOnClose, pristine, popupHandlers);
+
+  createPopupCloseHandlers(popupContainer, closeBtn, popupHandlers, onClosePopupFunc);
+  addPopupHandlers(popupHandlers);
 };
 
-export { addPopupHandlers, showPopup };
+export { showPopup, clearInputsInPopup };

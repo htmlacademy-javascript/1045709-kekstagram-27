@@ -1,9 +1,7 @@
-import { addPopupHandlers, showPopup } from './popup.js';
+import { showPopup, clearInputsInPopup } from './popup.js';
 import { pictures } from './photo-render.js';
 
 const COMMENTS_TO_UPLOAD_QUANTITY = 5;
-const IS_CLEAR_INPUTS_ON_CLOSE_POPUP = true;
-const IS_PRISTINE_IN_POPUP = false;
 
 const gallery = document.querySelector('.pictures');
 const popup = document.querySelector('.big-picture');
@@ -54,6 +52,10 @@ const generatePopupContent = (dataObj) => {
   uploadComments(dataObj.comments);
 };
 
+const onClosePopupFunc = () => {
+  clearInputsInPopup(popup);
+};
+
 const photoClickHandler = (evt) => {
   const picture = evt.target.closest('.picture');
   if (picture) {
@@ -64,9 +66,8 @@ const photoClickHandler = (evt) => {
     const popupHandlers = [
       {'target': popupCommentsLoaderBtn, 'type': 'click', 'func': commentsLoaderClickHandler}
     ];
-    addPopupHandlers(popupHandlers);
 
-    showPopup(popup, popupCloseButton, IS_CLEAR_INPUTS_ON_CLOSE_POPUP, IS_PRISTINE_IN_POPUP, popupHandlers);
+    showPopup(popup, popupCloseButton, popupHandlers, onClosePopupFunc);
   }
 };
 

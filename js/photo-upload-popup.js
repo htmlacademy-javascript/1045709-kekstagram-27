@@ -1,9 +1,6 @@
-import { addPopupHandlers, showPopup } from './popup.js';
-import { smallerScaleBtn, biigerScaleBtn, smallerScaleBtnClickHandler, biggerScaleBtnClickHandler } from './photo-upload-scale.js';
+import { showPopup, clearInputsInPopup } from './popup.js';
+import { scaleInput, smallerScaleBtn, biigerScaleBtn, smallerScaleBtnClickHandler, biggerScaleBtnClickHandler, uploadImg } from './photo-upload-scale.js';
 import { uploadForm, uploadFormSubmitHandler } from './photo-upload-validation.js';
-
-const IS_CLEAR_INPUTS_ON_CLOSE_POPUP = true;
-const IS_PRISTINE_IN_POPUP = true;
 
 const uploadFileInput = uploadForm.querySelector('#upload-file');
 const uploadPopup = uploadForm.querySelector('.img-upload__overlay');
@@ -15,7 +12,19 @@ const popupHandlers = [
   {'target': uploadForm, 'type': 'submit', 'func': uploadFormSubmitHandler}
 ];
 
+const onClosePopupFunc = () => {
+
+  uploadFileInput.value = '';
+
+  clearInputsInPopup(uploadPopup);
+
+  const pristineErrorsTexts = uploadPopup.querySelectorAll('.error-text');
+  pristineErrorsTexts.forEach((errorText) => (errorText.style.display = 'none'));
+
+  scaleInput.value = '100%';
+  uploadImg.style = '';
+};
+
 uploadFileInput.addEventListener('change', () => {
-  addPopupHandlers(popupHandlers);
-  showPopup(uploadPopup, uploadResetBtn, IS_CLEAR_INPUTS_ON_CLOSE_POPUP, IS_PRISTINE_IN_POPUP, popupHandlers);
+  showPopup(uploadPopup, uploadResetBtn, popupHandlers, onClosePopupFunc);
 });
