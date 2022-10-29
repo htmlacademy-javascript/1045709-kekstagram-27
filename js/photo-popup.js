@@ -1,4 +1,4 @@
-import { showPopup } from './popup.js';
+import { addPopupHandlers, showPopup } from './popup.js';
 import { pictures } from './photo-render.js';
 
 const COMMENTS_TO_UPLOAD_QUANTITY = 5;
@@ -59,9 +59,14 @@ const photoClickHandler = (evt) => {
   if (picture) {
     const pictureObj = pictures.find((elem) => elem.id === Number(picture.dataset.id));
     generatePopupContent(pictureObj);
+
     const commentsLoaderClickHandler = () => uploadComments(pictureObj.comments);
-    popupCommentsLoaderBtn.addEventListener('click', commentsLoaderClickHandler);
-    showPopup(popup, popupCloseButton, IS_CLEAR_INPUTS_ON_CLOSE_POPUP, IS_PRISTINE_IN_POPUP, commentsLoaderClickHandler);
+    const popupHandlers = [
+      {'target': popupCommentsLoaderBtn, 'type': 'click', 'func': commentsLoaderClickHandler}
+    ];
+    addPopupHandlers(popupHandlers);
+
+    showPopup(popup, popupCloseButton, IS_CLEAR_INPUTS_ON_CLOSE_POPUP, IS_PRISTINE_IN_POPUP, popupHandlers);
   }
 };
 

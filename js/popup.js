@@ -1,5 +1,3 @@
-import { popupCommentsLoaderBtn } from './photo-popup.js';
-
 const clearInputs = (popupContainer, pristine) => {
   const inputsWithoutDefaultVal = popupContainer.querySelectorAll('input:not([value])');
   const allTextAreas = popupContainer.querySelectorAll('textarea');
@@ -22,7 +20,15 @@ const clearInputs = (popupContainer, pristine) => {
 
 };
 
-const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pristine, commentsLoaderClickHandler) => {
+const addPopupHandlers = (popupHandlers) => {
+  popupHandlers.forEach((handlerObj) => handlerObj.target.addEventListener(handlerObj.type, handlerObj.func));
+};
+
+const removePopupHandlers = (popupHandlers) => {
+  popupHandlers.forEach((handlerObj) => handlerObj.target.removeEventListener(handlerObj.type, handlerObj.func));
+};
+
+const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pristine, popupHandlers) => {
 
   const closePopup = () => {
     popupContainer.classList.add('hidden');
@@ -32,8 +38,8 @@ const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pri
     if (clearInputsOnClose) {
       clearInputs(popupContainer, pristine);
     }
-    if (commentsLoaderClickHandler) {
-      popupCommentsLoaderBtn.removeEventListener('click', commentsLoaderClickHandler);
+    if (popupHandlers) {
+      removePopupHandlers(popupHandlers);
     }
   };
 
@@ -51,14 +57,10 @@ const addPopupCloseHandlers = (popupContainer, closeBtn, clearInputsOnClose, pri
   document.addEventListener('keydown', popupCloseKeydownHandler);
 };
 
-const showPopup = (popupContainer, closeBtn, clearInputsOnClose = false, pristine = false, commentsLoaderClickHandler = false) => {
+const showPopup = (popupContainer, closeBtn, clearInputsOnClose = false, pristine = false, popupHandlers = false) => {
   document.body.classList.add('modal-open');
   popupContainer.classList.remove('hidden');
-  if (commentsLoaderClickHandler) {
-    addPopupCloseHandlers(popupContainer, closeBtn, clearInputsOnClose, pristine, commentsLoaderClickHandler);
-    return;
-  }
-  addPopupCloseHandlers(popupContainer, closeBtn, clearInputsOnClose, pristine);
+  addPopupCloseHandlers(popupContainer, closeBtn, clearInputsOnClose, pristine, popupHandlers);
 };
 
-export { showPopup };
+export { addPopupHandlers, showPopup };
