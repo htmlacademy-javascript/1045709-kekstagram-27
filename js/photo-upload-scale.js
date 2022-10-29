@@ -28,7 +28,4 @@ const biggerScaleBtnClickHandler = () => {
   }
 };
 
-smallerScaleBtn.addEventListener('click', smallerScaleBtnClickHandler);
-biigerScaleBtn.addEventListener('click', biggerScaleBtnClickHandler);
-
 export { smallerScaleBtn, biigerScaleBtn, smallerScaleBtnClickHandler, biggerScaleBtnClickHandler };

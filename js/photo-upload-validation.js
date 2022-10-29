@@ -40,6 +40,4 @@ const uploadFormSubmitHandler = (evt) => {
   }
 };
 
-uploadForm.addEventListener('submit', uploadFormSubmitHandler);
-
 export { uploadForm, uploadFormSubmitHandler };
