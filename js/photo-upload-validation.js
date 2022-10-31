@@ -15,6 +15,12 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'error-text',
 });
 
+
+const clearPristineErrors = () => {
+  const pristineErrorsTexts = uploadForm.querySelectorAll('.error-text');
+  pristineErrorsTexts.forEach((errorText) => (errorText.style.display = 'none'));
+};
+
 const validateHashtagSymbols = () => {
   if (uploadHashtag.value !== '') {
     return uploadHashtag.value.split(' ').every((hastag) => HASTAG_REGEX.test(hastag));
@@ -40,4 +46,4 @@ const uploadFormSubmitHandler = (evt) => {
   }
 };
 
-export { uploadForm, uploadFormSubmitHandler };
+export { uploadForm, uploadFormSubmitHandler, clearPristineErrors };

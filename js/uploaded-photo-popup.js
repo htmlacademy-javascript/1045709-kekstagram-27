@@ -1,5 +1,5 @@
 import { showPopup, clearInputsInPopup } from './popup.js';
-import { pictures } from './photo-render.js';
+import { pictures } from './uploaded-photos-render.js';
 
 const COMMENTS_TO_UPLOAD_QUANTITY = 5;
 

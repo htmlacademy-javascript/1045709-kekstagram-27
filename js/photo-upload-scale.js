@@ -1,12 +1,18 @@
+import { uploadImg } from './photo-upload-popup.js';
+
 const MAX_SCALE_VALUE = 100;
 const MIN_SCALE_VALUE = 25;
 const SCALE_STEP = 25;
 
-const uploadImg = document.querySelector('.img-upload__preview').querySelector('img');
 const smallerScaleBtn = document.querySelector('.scale__control--smaller');
 const biigerScaleBtn = document.querySelector('.scale__control--bigger');
 const scaleInput = document.querySelector('.scale__control--value');
 
+
+const resetPhotoScale = () => {
+  scaleInput.value = '100%';
+  uploadImg.style = '';
+};
 
 const getPhotoScale = () => parseInt(scaleInput.value, 10);
 
@@ -29,4 +35,4 @@ const biggerScaleBtnClickHandler = () => {
   }
 };
 
-export { scaleInput, smallerScaleBtn, biigerScaleBtn, smallerScaleBtnClickHandler, biggerScaleBtnClickHandler, uploadImg };
+export { smallerScaleBtn, biigerScaleBtn, smallerScaleBtnClickHandler, biggerScaleBtnClickHandler, resetPhotoScale };

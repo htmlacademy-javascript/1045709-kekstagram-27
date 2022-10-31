@@ -21,6 +21,10 @@ const createPopupCloseHandlers = (popupContainer, closeBtn, popupHandlers, onClo
     closeBtn.removeEventListener('click', popupCloseClickHandler);
     document.removeEventListener('keydown', popupCloseKeydownHandler);
     removePopupHandlers(popupHandlers);
+    const popupForm = popupContainer.closest('form');
+    if (popupForm) {
+      popupForm.reset();
+    }
     if (onClosePopupFunc) {
       onClosePopupFunc();
     }
