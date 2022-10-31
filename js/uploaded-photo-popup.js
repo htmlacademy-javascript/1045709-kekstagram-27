@@ -72,5 +72,3 @@ const photoClickHandler = (evt) => {
 };
 
 gallery.addEventListener('click', photoClickHandler);
-
-export { popupCommentsLoaderBtn };
