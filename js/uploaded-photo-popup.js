@@ -1,9 +1,7 @@
-import { showPopup } from './popup.js';
-import { pictures } from './photo-render.js';
+import { showPopup, clearInputsInPopup } from './popup.js';
+import { pictures } from './uploaded-photos-render.js';
 
 const COMMENTS_TO_UPLOAD_QUANTITY = 5;
-const IS_CLEAR_INPUTS_ON_CLOSE_POPUP = true;
-const IS_PRISTINE_IN_POPUP = false;
 
 const gallery = document.querySelector('.pictures');
 const popup = document.querySelector('.big-picture');
@@ -54,17 +52,23 @@ const generatePopupContent = (dataObj) => {
   uploadComments(dataObj.comments);
 };
 
+const onClosePopupFunc = () => {
+  clearInputsInPopup(popup);
+};
+
 const photoClickHandler = (evt) => {
   const picture = evt.target.closest('.picture');
   if (picture) {
     const pictureObj = pictures.find((elem) => elem.id === Number(picture.dataset.id));
     generatePopupContent(pictureObj);
+
     const commentsLoaderClickHandler = () => uploadComments(pictureObj.comments);
-    popupCommentsLoaderBtn.addEventListener('click', commentsLoaderClickHandler);
-    showPopup(popup, popupCloseButton, IS_CLEAR_INPUTS_ON_CLOSE_POPUP, IS_PRISTINE_IN_POPUP, commentsLoaderClickHandler);
+    const popupHandlers = [
+      {'target': popupCommentsLoaderBtn, 'type': 'click', 'func': commentsLoaderClickHandler}
+    ];
+
+    showPopup(popup, popupCloseButton, popupHandlers, onClosePopupFunc);
   }
 };
 
 gallery.addEventListener('click', photoClickHandler);
-
-export { popupCommentsLoaderBtn };
