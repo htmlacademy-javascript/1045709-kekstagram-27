@@ -1,34 +1,43 @@
-import { showPopup, clearInputsInPopup } from './popup.js';
-import { smallerScaleBtn, biigerScaleBtn, smallerScaleBtnClickHandler, biggerScaleBtnClickHandler, resetPhotoScale } from './photo-upload-scale.js';
-import { uploadForm, uploadFormSubmitHandler, clearPristineErrors } from './photo-upload-validation.js';
-import { effectsListContainer, effectsListClickHandler, resetPhotoEffect, resetPhotoEffectSlider } from './photo-upload-effects.js';
+import { showModal, closeModal, addPopupCloseHandlers, removePopupCloseHandlers } from './popup.js';
+import { uploadForm, clearPristineErrors } from './photo-upload-validation.js';
+import { resetPhotoScale } from './photo-upload-scale.js';
+import { resetPhotoEffect, resetPhotoEffectSlider } from './photo-upload-effects.js';
 
 const uploadFileInput = uploadForm.querySelector('#upload-file');
 const uploadPopup = uploadForm.querySelector('.img-upload__overlay');
-const uploadImg = uploadForm.querySelector('.img-upload__preview').querySelector('img');
 const uploadClosePopupBtn = uploadForm.querySelector('#upload-cancel');
 
-const popupHandlers = [
-  {'target': smallerScaleBtn, 'type': 'click', 'func': smallerScaleBtnClickHandler},
-  {'target': biigerScaleBtn, 'type': 'click', 'func': biggerScaleBtnClickHandler},
-  {'target': uploadForm, 'type': 'submit', 'func': uploadFormSubmitHandler},
-  {'target': effectsListContainer, 'type': 'click', 'func': effectsListClickHandler}
-];
 
-
-const onClosePopupFunc = () => {
+const closeUploadPopup = () => {
+  closeModal(uploadPopup);
+  removePopupCloseHandlers(uploadClosePopupBtn, closePopupClickHandler, closePopupKeydownHandler);
 
   uploadFileInput.value = '';
+  uploadForm.reset();
 
-  clearInputsInPopup(uploadPopup);
   clearPristineErrors();
   resetPhotoScale();
   resetPhotoEffect();
   resetPhotoEffectSlider();
 };
 
+const showUploadPopup = () => {
+  showModal(uploadPopup);
+  addPopupCloseHandlers(uploadClosePopupBtn, closePopupClickHandler, closePopupKeydownHandler);
+};
+
+function closePopupClickHandler() {
+  closeUploadPopup();
+}
+
+function closePopupKeydownHandler(evt) {
+  if (evt.code === 'Escape' && document.activeElement.getAttribute('type') !== 'text' && document.activeElement.tagName !== 'TEXTAREA') {
+    closeUploadPopup();
+  }
+}
+
 uploadFileInput.addEventListener('change', () => {
-  showPopup(uploadPopup, uploadClosePopupBtn, popupHandlers, onClosePopupFunc);
+  showUploadPopup();
 });
 
-export { uploadImg };
+export { uploadPopup, closeUploadPopup, closePopupKeydownHandler };

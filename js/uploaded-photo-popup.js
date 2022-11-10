@@ -1,6 +1,7 @@
-import { showPopup, clearInputsInPopup } from './popup.js';
-import { pictures } from './uploaded-photos-render.js';
+import { clearInputs } from './util.js';
+import { showModal, closeModal, addPopupCloseHandlers, removePopupCloseHandlers } from './popup.js';
 
+const DEFAULT_COMMENTS_QUANTITY = 5;
 const COMMENTS_TO_UPLOAD_QUANTITY = 5;
 
 const gallery = document.querySelector('.pictures');
@@ -12,22 +13,22 @@ const popupDescription = popup.querySelector('.social__caption');
 const popupCloseButton = popup.querySelector('.big-picture__cancel');
 
 const popupCommentsList = popup.querySelector('.social__comments');
-const commentElementTemplate = popupCommentsList.querySelector('.social__comment');
+const commentTemplate = popupCommentsList.querySelector('.social__comment');
 const uploadedCommentsCollection = popupCommentsList.children;
 const popupUploadedCommentsCount = popup.querySelector('.uploaded-comments-count');
 const popupCommentsLoaderBtn = popup.querySelector('.comments-loader');
 
 
 const createCommentElement = (commentObj) => {
-  const comment = commentElementTemplate.cloneNode(true);
+  const comment = commentTemplate.cloneNode(true);
   comment.querySelector('.social__picture').src = commentObj.avatar;
   comment.querySelector('.social__picture').alt = commentObj.name;
   comment.querySelector('.social__text').textContent = commentObj.message;
   return comment;
 };
 
-const uploadComments = (commentsArr) => {
-  for (let i = 1; i <= COMMENTS_TO_UPLOAD_QUANTITY; i++) {
+const uploadComments = (commentsArr, commentsQuantity) => {
+  for (let i = 1; i <= commentsQuantity; i++) {
     const comment = createCommentElement(commentsArr[uploadedCommentsCollection.length]);
     popupCommentsList.appendChild(comment);
 
@@ -49,26 +50,49 @@ const generatePopupContent = (dataObj) => {
 
   popupCommentsLoaderBtn.classList.remove('hidden');
   popupCommentsList.innerHTML = '';
-  uploadComments(dataObj.comments);
+  uploadComments(dataObj.comments, DEFAULT_COMMENTS_QUANTITY);
 };
 
-const onClosePopupFunc = () => {
-  clearInputsInPopup(popup);
-};
+const createPopupCloseHandlers = (commentsLoaderClickHandler) => {
 
-const photoClickHandler = (evt) => {
-  const picture = evt.target.closest('.picture');
-  if (picture) {
-    const pictureObj = pictures.find((elem) => elem.id === Number(picture.dataset.id));
-    generatePopupContent(pictureObj);
+  const closePhotoPopup = () => {
+    closeModal(popup);
+    clearInputs(popup);
+    popupCommentsLoaderBtn.removeEventListener('click', commentsLoaderClickHandler);
+    removePopupCloseHandlers(popupCloseButton, closePopupClickHandler, closePopupKeydownHandler);
+  };
 
-    const commentsLoaderClickHandler = () => uploadComments(pictureObj.comments);
-    const popupHandlers = [
-      {'target': popupCommentsLoaderBtn, 'type': 'click', 'func': commentsLoaderClickHandler}
-    ];
-
-    showPopup(popup, popupCloseButton, popupHandlers, onClosePopupFunc);
+  function closePopupClickHandler() {
+    closePhotoPopup();
   }
+
+  function closePopupKeydownHandler(evt) {
+    if (evt.code === 'Escape' && document.activeElement.getAttribute('type') !== 'text' && document.activeElement.tagName !== 'TEXTAREA') {
+      closePhotoPopup();
+    }
+  }
+
+  addPopupCloseHandlers(popupCloseButton, closePopupClickHandler, closePopupKeydownHandler);
 };
 
-gallery.addEventListener('click', photoClickHandler);
+const showPhotoPopup = (commentsLoaderClickHandler) => {
+  showModal(popup);
+  popupCommentsLoaderBtn.addEventListener('click', commentsLoaderClickHandler);
+  createPopupCloseHandlers(commentsLoaderClickHandler);
+};
+
+const addPhotoClickHandler = (photos) => {
+
+  gallery.addEventListener('click', (evt) => {
+    const photo = evt.target.closest('.picture');
+    if (photo) {
+      const dataObj = photos.find((elem) => elem.id === Number(photo.dataset.id));
+      const commentsLoaderClickHandler = () => uploadComments(dataObj.comments, COMMENTS_TO_UPLOAD_QUANTITY);
+      generatePopupContent(dataObj);
+      showPhotoPopup(commentsLoaderClickHandler);
+    }
+  });
+
+};
+
+export { addPhotoClickHandler };

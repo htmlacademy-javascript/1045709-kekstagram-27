@@ -15,7 +15,6 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'error-text',
 });
 
-
 const clearPristineErrors = () => {
   const pristineErrorsTexts = uploadForm.querySelectorAll('.error-text');
   pristineErrorsTexts.forEach((errorText) => (errorText.style.display = 'none'));
@@ -40,10 +39,4 @@ const validateDescriptionMaxLength = () => checkMaxLength(uploadDescription.valu
 
 pristine.addValidator(uploadDescription, validateDescriptionMaxLength, `Максимальное длина ${MAX_DESCRIPTION_LENGTH} символов`);
 
-const uploadFormSubmitHandler = (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
-  }
-};
-
-export { uploadForm, uploadFormSubmitHandler, clearPristineErrors };
+export { uploadForm, pristine, clearPristineErrors };
