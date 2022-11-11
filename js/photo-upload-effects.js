@@ -1,3 +1,5 @@
+import { uploadImg } from './photo-upload-scale.js';
+
 const EFFECTS = [
   {
     name: 'none',
@@ -63,14 +65,13 @@ const EFFECTS = [
 
 const DEFAULT_EFFECT = EFFECTS[0];
 
-const uploadImg = document.querySelector('.img-upload__preview').querySelector('img');
-const sliderElement = document.querySelector('.effect-level__slider');
-const sliderInputElement = document.querySelector('.effect-level__value');
+const slider = document.querySelector('.effect-level__slider');
+const sliderInput = document.querySelector('.effect-level__value');
 const effectsListContainer = document.querySelector('.effects__list');
 
 let chosenEffect = DEFAULT_EFFECT;
 
-noUiSlider.create(sliderElement, {
+noUiSlider.create(slider, {
   range: {
     min: 0,
     max: 100,
@@ -87,13 +88,13 @@ const resetPhotoEffect = () => {
 };
 
 const resetPhotoEffectSlider = () => {
-  sliderElement.classList.add('hidden');
-  sliderInputElement.value = 0;
+  slider.classList.add('hidden');
+  sliderInput.value = 0;
 };
 
-sliderElement.noUiSlider.on('update', () => {
-  sliderInputElement.value = sliderElement.noUiSlider.get();
-  uploadImg.style.filter = chosenEffect.getFilterStyle(sliderInputElement.value);
+slider.noUiSlider.on('update', () => {
+  sliderInput.value = slider.noUiSlider.get();
+  uploadImg.style.filter = chosenEffect.getFilterStyle(sliderInput.value);
 });
 
 const effectsListClickHandler = (evt) => {
@@ -107,10 +108,10 @@ const effectsListClickHandler = (evt) => {
       return;
     }
 
-    sliderElement.classList.remove('hidden');
+    slider.classList.remove('hidden');
     uploadImg.className = `effects__preview--${chosenEffect.name}`;
 
-    sliderElement.noUiSlider.updateOptions({
+    slider.noUiSlider.updateOptions({
       range: {
         min: chosenEffect.min,
         max: chosenEffect.max,
@@ -122,4 +123,6 @@ const effectsListClickHandler = (evt) => {
   }
 };
 
-export { effectsListContainer, effectsListClickHandler, resetPhotoEffect, resetPhotoEffectSlider };
+effectsListContainer.addEventListener('click', effectsListClickHandler);
+
+export { resetPhotoEffect, resetPhotoEffectSlider };

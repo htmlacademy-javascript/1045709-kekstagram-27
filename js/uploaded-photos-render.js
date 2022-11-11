@@ -1,21 +1,17 @@
-import { createPhotoDescriptions } from './uploaded-photos-data.js';
+const photosContainer = document.querySelector('.pictures');
+const photoTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const photoFragment = document.createDocumentFragment();
 
-const picturesContainer = document.querySelector('.pictures');
-const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const renderPhotosList = (photos) => {
+  photos.forEach(({id, url, likes, comments}) => {
+    const photo = photoTemplate.cloneNode(true);
+    photo.dataset.id = id;
+    photo.querySelector('.picture__img').src = url;
+    photo.querySelector('.picture__likes').textContent = likes;
+    photo.querySelector('.picture__comments').textContent = comments.length;
+    photoFragment.appendChild(photo);
+  });
+  photosContainer.appendChild(photoFragment);
+};
 
-const pictures = createPhotoDescriptions();
-
-const pictureFragment = document.createDocumentFragment();
-
-pictures.forEach(({id, url, likes, comments}) => {
-  const picture = pictureTemplate.cloneNode(true);
-  picture.dataset.id = id;
-  picture.querySelector('.picture__img').src = url;
-  picture.querySelector('.picture__likes').textContent = likes;
-  picture.querySelector('.picture__comments').textContent = comments.length;
-  pictureFragment.appendChild(picture);
-});
-
-picturesContainer.appendChild(pictureFragment);
-
-export { pictures };
+export { renderPhotosList };
