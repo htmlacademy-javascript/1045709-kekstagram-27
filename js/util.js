@@ -1,5 +1,23 @@
 const checkMaxLength = (value, maxLength) => value.length <= maxLength;
 
+const getRandomArrValues = (arr, valuesQuantity) => {
+  const result = [];
+
+  const createRandomIndex = () => {
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    if (result.includes(arr[randomIndex])) {
+      return createRandomIndex();
+    }
+    return randomIndex;
+  };
+
+  for (let i = 0; i < valuesQuantity; i++) {
+    result.push(arr[createRandomIndex()]);
+  }
+
+  return result;
+};
+
 const checkArrValuesNotRepeat = (arr, isStringsArr = false) => {
   if (isStringsArr) {
     arr = arr.map((string) => string.toLowerCase());
@@ -31,4 +49,12 @@ const showErrorAlert = (message) => {
 
 };
 
-export { checkMaxLength, checkArrValuesNotRepeat, clearInputs, showErrorAlert };
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { checkMaxLength, getRandomArrValues, checkArrValuesNotRepeat, clearInputs, showErrorAlert, debounce };
