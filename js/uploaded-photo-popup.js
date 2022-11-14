@@ -31,13 +31,12 @@ const uploadComments = (commentsArr, commentsQuantity) => {
   for (let i = 1; i <= commentsQuantity; i++) {
     const comment = createCommentElement(commentsArr[uploadedCommentsCollection.length]);
     popupCommentsList.appendChild(comment);
-
-    if (!commentsArr[uploadedCommentsCollection.length]) {
+    const isLastComment = !commentsArr[uploadedCommentsCollection.length];
+    if (isLastComment) {
       popupCommentsLoaderBtn.classList.add('hidden');
       popupUploadedCommentsCount.textContent = commentsArr.length;
       return;
     }
-
   }
   popupUploadedCommentsCount.textContent = uploadedCommentsCollection.length;
 };
