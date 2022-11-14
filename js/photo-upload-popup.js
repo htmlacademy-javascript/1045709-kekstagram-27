@@ -1,6 +1,6 @@
 import { showModal, closeModal, addPopupCloseHandlers, removePopupCloseHandlers } from './popup.js';
 import { uploadForm, clearPristineErrors } from './photo-upload-validation.js';
-import { resetPhotoScale } from './photo-upload-scale.js';
+import { uploadImg, resetPhotoScale } from './photo-upload-scale.js';
 import { resetPhotoEffect, resetPhotoEffectSlider } from './photo-upload-effects.js';
 
 const uploadFileInput = uploadForm.querySelector('#upload-file');
@@ -36,8 +36,13 @@ function closePopupKeydownHandler(evt) {
   }
 }
 
-uploadFileInput.addEventListener('change', () => {
+uploadImg.addEventListener('load', () => {
   showUploadPopup();
+});
+
+uploadFileInput.addEventListener('change', () => {
+  const chosenFile = uploadFileInput.files[0];
+  uploadImg.src = URL.createObjectURL(chosenFile);
 });
 
 export { uploadPopup, closeUploadPopup, closePopupKeydownHandler };
