@@ -2,6 +2,9 @@ import { showModal, closeModal, addPopupCloseHandlers, removePopupCloseHandlers 
 import { uploadForm, clearPristineErrors } from './photo-upload-validation.js';
 import { uploadImg, resetPhotoScale } from './photo-upload-scale.js';
 import { resetPhotoEffect, resetPhotoEffectSlider } from './photo-upload-effects.js';
+import { showErrorAlert } from './util.js';
+
+const UPLOAD_FILES_TYPES = ['jpg', 'jpeg', 'png'];
 
 const uploadFileInput = uploadForm.querySelector('#upload-file');
 const uploadPopup = uploadForm.querySelector('.img-upload__overlay');
@@ -42,6 +45,15 @@ uploadImg.addEventListener('load', () => {
 
 uploadFileInput.addEventListener('change', () => {
   const chosenFile = uploadFileInput.files[0];
+  const fileName = chosenFile.name.toLowerCase();
+
+  const matches = UPLOAD_FILES_TYPES.some((it) => fileName.endsWith(it));
+
+  if (!matches) {
+    showErrorAlert(`выберите файл с расширением ${UPLOAD_FILES_TYPES.join(', ')}`);
+    return;
+  }
+
   uploadImg.src = URL.createObjectURL(chosenFile);
 });
 
