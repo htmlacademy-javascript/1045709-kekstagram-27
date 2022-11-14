@@ -5,6 +5,7 @@ import { resetPhotoEffect, resetPhotoEffectSlider } from './photo-upload-effects
 import { showErrorAlert } from './util.js';
 
 const UPLOAD_FILES_TYPES = ['jpg', 'jpeg', 'png'];
+const FILE_TYPE_ERROR_SHOW_TIME = 8000;
 
 const uploadFileInput = uploadForm.querySelector('#upload-file');
 const uploadPopup = uploadForm.querySelector('.img-upload__overlay');
@@ -50,7 +51,7 @@ uploadFileInput.addEventListener('change', () => {
   const matches = UPLOAD_FILES_TYPES.some((it) => fileName.endsWith(it));
 
   if (!matches) {
-    showErrorAlert(`выберите файл с расширением ${UPLOAD_FILES_TYPES.join(', ')}`);
+    showErrorAlert(`выберите файл с расширением ${UPLOAD_FILES_TYPES.join(', ')}`, FILE_TYPE_ERROR_SHOW_TIME);
     return;
   }
 
