@@ -1,4 +1,4 @@
-import { uploadImg } from './photo-upload-scale.js';
+import { uploadImg } from './photo-upload.js';
 
 const EFFECTS = [
   {

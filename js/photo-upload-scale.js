@@ -1,8 +1,9 @@
+import { uploadImg } from './photo-upload.js';
+
 const MAX_SCALE_VALUE = 100;
 const MIN_SCALE_VALUE = 25;
 const SCALE_STEP = 25;
 
-const uploadImg = document.querySelector('.img-upload__preview').querySelector('img');
 const smallerScaleBtn = document.querySelector('.scale__control--smaller');
 const biggerScaleBtn = document.querySelector('.scale__control--bigger');
 const scaleInput = document.querySelector('.scale__control--value');
