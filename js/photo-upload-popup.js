@@ -1,24 +1,14 @@
 import { showModal, closeModal, addPopupCloseHandlers, removePopupCloseHandlers } from './popup.js';
-import { uploadForm, clearPristineErrors } from './photo-upload-validation.js';
-import { resetPhotoScale } from './photo-upload-scale.js';
-import { resetPhotoEffect, resetPhotoEffectSlider } from './photo-upload-effects.js';
+import { uploadReset } from './photo-upload-reset.js';
 
-const uploadFileInput = uploadForm.querySelector('#upload-file');
-const uploadPopup = uploadForm.querySelector('.img-upload__overlay');
-const uploadClosePopupBtn = uploadForm.querySelector('#upload-cancel');
+const uploadPopup = document.querySelector('.img-upload__overlay');
+const uploadClosePopupBtn = document.querySelector('#upload-cancel');
 
 
 const closeUploadPopup = () => {
   closeModal(uploadPopup);
   removePopupCloseHandlers(uploadClosePopupBtn, closePopupClickHandler, closePopupKeydownHandler);
-
-  uploadFileInput.value = '';
-  uploadForm.reset();
-
-  clearPristineErrors();
-  resetPhotoScale();
-  resetPhotoEffect();
-  resetPhotoEffectSlider();
+  uploadReset();
 };
 
 const showUploadPopup = () => {
@@ -36,8 +26,4 @@ function closePopupKeydownHandler(evt) {
   }
 }
 
-uploadFileInput.addEventListener('change', () => {
-  showUploadPopup();
-});
-
-export { uploadPopup, closeUploadPopup, closePopupKeydownHandler };
+export { uploadPopup, showUploadPopup, closeUploadPopup, closePopupKeydownHandler };

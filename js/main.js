@@ -5,6 +5,7 @@ import { addPhotoClickHandler } from './uploaded-photo-popup.js';
 import { showErrorAlert } from './util.js';
 import './photo-upload-popup.js';
 import './photo-upload-submit.js';
+import './photo-upload.js';
 
 getData(
   (photos) => {

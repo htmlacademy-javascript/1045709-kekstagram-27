@@ -33,7 +33,7 @@ const clearInputs = (container) => {
   allTextAreas.forEach((textArea) => (textArea.value = ''));
 };
 
-const showErrorAlert = (message) => {
+const showErrorAlert = (message, showTime = false) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
   alertContainer.style.position = 'absolute';
@@ -46,6 +46,12 @@ const showErrorAlert = (message) => {
 
   alertContainer.textContent = message;
   document.body.append(alertContainer);
+
+  if (showTime) {
+    setTimeout(() => {
+      alertContainer.remove();
+    }, showTime);
+  }
 
 };
 
