@@ -1,6 +1,6 @@
 import { checkMaxLength, checkArrValuesNotRepeat } from './util.js';
 
-const HASTAG_REGEX = /^#[a-zа-яё0-9]/i;
+const HASTAG_REGEX = /^#[a-zа-яё0-9]{1,}$/i;
 const MAX_HASTAG_LENGTH = 20;
 const MAX_HASTAG_QUANTITY = 5;
 const MAX_DESCRIPTION_LENGTH = 140;
